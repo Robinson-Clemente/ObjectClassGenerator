@@ -1,125 +1,130 @@
-from ViewTest import mostrar_mensaje
+from Atributo import *  
+from Messages import programMessage
+
+nombreclase = ""
+ruta = ""
+checkedlist = []
+#Data list contains objects of Atributo class
+data =[]
+
+def recibir(nombre,rut,checkboxes,attribute):
+    global nombreclase
+    global ruta
+    global checkedlist
+    global data    
+    nombreclase = nombre
+    ruta = rut
+    checkedlist =checkboxes
+    data = attribute
 
 
 
-nombreclase = "Atributo"
-ruta = "/home/inspiron/Escritorio"
-checkedlist = ['repr']
-atributos = []
-atributos_getter = []
-atributos_setter = []
-tipos = []
+def openFile_a():
+    file = open(f"{ruta}/{nombreclase}.py","a")
+    return file
 
 
-#itemtest =tabla.GetItem(0,col=0)
-#itemtest2 =tabla.GetItem(0,col=1)
-#itemtest3 =tabla.GetItem(0,col=2) 
-#itemtest4 =tabla.GetItem(0,col=3)    
-                
-
-
-def generador_archivo(nombreclase,ruta):
-    file = open(f"{ruta}/{nombreclase}.py","x")
-    file.close()
-
-def definir_atributos(tabla):
-    limite=tabla.GetItemCount()
-    for y in range(0,limite,1):
-      variable = tabla.GetItem(y,col=0)
-      atributos.append(variable.GetText())
-
-    for y in range(0,limite,1):
-        tipo = tabla.GetItem(y,col=1)
-        tipos.append(tipo.GetText())  
-
-def get_data(data_list):
-    pass
-
-def class_constructor(nombreclase,ruta,tabla):
+def generador_archivo():    
+    try:
+        file = open(f"{ruta}/{nombreclase}.py","x")
+        file.close()
+    except Exception:
+         programMessage()
     
 
-    file = open(f"{ruta}/{nombreclase}.py","a")
+
+def class_constructor():
+    file = openFile_a()
     file.write(f"\nclass {nombreclase}(): ")
     file.write("\n")
     
-    string = listar_variables_horizontal(tabla)
+    string = listar_variables_horizontal()
     file.write(f"\n    def __init__(self{string}):")
     file.close()
-    listar_variables_vertical(nombreclase,ruta)
+    listar_variables_vertical()
 
     file.close()
         
 
-def listar_variables_horizontal(tabla):
-   
-    x=0
-    cadena = ""
-    
-    definir_atributos(tabla)
+def listar_variables_horizontal():    
+    cadena = ""  
 
-    for atributo in atributos:
-        cadena = cadena+f",{atributo}"
+    for atributo in data:
+        cadena = cadena+f",{atributo.nombre}"
 
     return cadena
 
-def listar_variables_vertical(nombreclase,ruta):
+def listar_variables_vertical():
 
-    file = open(f"{ruta}/{nombreclase}.py","a")
+    file = openFile_a()
 
     #Por ahora por defecto hago los atributos 'privados' debido a que si
     #Vas a crear una clase con get and set los atributos deben ser privados(get-set)
-    for atributo in atributos:
-        file.write(f"\n        self.__{atributo} = {atributo}")
+    for atributo in data:
+        file.write(f"\n        self.__{atributo.nombre} = {atributo.nombre}")
 
     file.close()        
 
 
-def getter_setter(nombreclase,ruta):
+def getter_setter():
     comilla = "'"
     
-    #Getter Method
-    file = open(f"{ruta}/{nombreclase}.py","a")
+    file = openFile_a()
     file.write("\n")
-    file.write("\n")    
+    file.write("\n")   
 
-    for atributo in atributos:
-        file.write("\n    @property")
-        file.write(f"\n    def {atributo}(self):")
-        file.write(f"\n        return self.__{atributo}")
-        file.write("\n")    
+    #Getter Methods   
+    for atributo in data:
+        if atributo.get:
+           file.write("\n    @property")
+           file.write(f"\n    def {atributo.nombre}(self):")
+           file.write(f"\n        return self.__{atributo.nombre}")
+           file.write("\n") 
+                
+    #Setter Methods
+    for atributo in data:
+        if atributo.sett:
+           file.write(f"\n    @{atributo.nombre}.setter")        
+           file.write(f"\n    def {atributo.nombre}(self,{atributo.nombre}):")
+           file.write(f"\n        if isinstance({atributo.nombre},{atributo.tipo}):")    
+           file.write(f"\n           self.__{atributo.nombre} = {atributo.nombre}")
+           file.write(f"\n        else:")
+           file.write(f"\n            raise TypeError({comilla}Tipo invalido para el atributo{comilla}) ")     
+           file.write("\n") 
 
-    #Setter Method
-    n=0
-    for atributo in atributos:
-        file.write(f"\n    @{atributo}.setter")        
-        file.write(f"\n    def {atributo}(self,{atributo}):")
-        file.write(f"\n        if isinstance({atributo},{tipos[n]}):")    
-        file.write(f"\n           self.__{atributo} = {atributo}")
-        file.write(f"\n        else:")
-        file.write(f"\n            raise TypeError({comilla}Tipo invalido para el atributo{comilla}) ")     
-        file.write("\n")
-        n+=1    
+  
     file.close()        
 
 
-def repr_method_generator(nombreclase,ruta):
-        
-    file = open(f"{ruta}/{nombreclase}.py","a")
+def repr_method_generator():        
+    file = openFile_a()
     cadena = ""
     comilla = "'"
     llave_a = "{"
     llave_b = "}"
-    for atributo in atributos:
+    for atributo in data:
         if cadena == "":
-           cadena = cadena + f"{llave_a}self.{atributo}{llave_b}" 
+           cadena = cadena + f"{llave_a}self.{atributo.nombre}{llave_b}" 
         else:
-            cadena = cadena + f":{llave_a}self.{atributo}{llave_b}"
+            cadena = cadena + f":{llave_a}self.{atributo.nombre}{llave_b}"
     
     file.write("\n    def __repr__(self):")
     file.write(f"\n       return f{comilla}{cadena}{comilla}  ")
     file.close()    
-            
 
-generador_archivo(nombreclase,ruta)
-class_constructor(nombreclase,ruta,tabla)
-getter_setter(nombreclase,ruta)
+def lector_checkboxes():
+    n=0
+    for checked in checkedlist:
+        if checked:
+           if n==0:           
+              repr_method_generator() 
+        
+        n=n+1
+
+
+def ejecutar():
+    generador_archivo()
+    class_constructor()
+    getter_setter()
+    lector_checkboxes()
+    
