@@ -1,7 +1,7 @@
 import wx
 import wx.lib.agw.ultimatelistctrl as ULC
 from Validaciones import retornar
-from Atributo import *
+from Atributo import Atributo
 from Generadores import recibir
 from Generadores import ejecutar
 
@@ -25,9 +25,6 @@ class ViewTest(wx.Frame):
         checked_boxes = []
         
       
-
-        
-
 #---------------------------------------- SECCIÓN MÉTODO --------------------------------------------------
         #Este es el metodo que se debe ejecutar para mostrar el buscador de carpeta
         def selector(event):            
@@ -97,8 +94,7 @@ class ViewTest(wx.Frame):
             limite = self.tabla2.GetItemCount()
             nombreclase = self.tcNombreClase.GetValue()
             ruta = self.path
-            
-            
+                        
             for x in range(0,limite,1):
                 col1 = self.tabla2.GetItem(x,col=0).GetText()
                 col2 = self.tabla2.GetItem(x,col=1).GetText()
@@ -108,14 +104,10 @@ class ViewTest(wx.Frame):
                 attribute_list.append(atributo)
             read_checkboxes()
             recibir(nombreclase,ruta,checked_boxes,attribute_list)
-           
-    
+               
         def mostrarRuta(event):            
             wx.MessageBox(self.path,caption='Path seleccionado',
                 style= wx.OK|wx.CENTRE|wx.ICON_INFORMATION) 
-
-          
-            
 
         def generar_clase(event):
             if self.tcNombreClase.GetValue()=='' or self.tcNombreClase.GetValue()==None:
@@ -134,7 +126,11 @@ class ViewTest(wx.Frame):
                  programMessage()
 
 
-           
+        def eliminarAtributo(event):
+            item =  self.tabla2.GetFirstSelected()            
+            self.tabla2.DeleteItem(item)
+            self.n = self.n - 1
+            self.tabla2.Update()
             
 
 #---------------------------------------- SECCIÓN METODO--------------------------------------------------
@@ -145,8 +141,8 @@ class ViewTest(wx.Frame):
         self.line1.SetBackgroundColour((8,8,8))
 
         self.line2 = wx.StaticBox(panel,label='',pos=(450,353),size=(3,150))
-        self.line2.SetBackgroundColour((8,8,8))
-      
+        self.line2.SetBackgroundColour((8,8,8))      
+        
 
         #Creamos la tabla
         self.tabla2 = wx.lib.agw.ultimatelistctrl.UltimateListCtrl(panel,pos=(150,40),size=(600,300),agwStyle=ULC.ULC_REPORT)
@@ -154,6 +150,7 @@ class ViewTest(wx.Frame):
         self.tabla2.InsertColumn(1,'Type',format=ULC.ULC_FORMAT_LEFT,width=150)
         self.tabla2.InsertColumn(2,'Get Method',format=ULC.ULC_FORMAT_LEFT,width=150)
         self.tabla2.InsertColumn(3,'Set Method',format=ULC.ULC_FORMAT_LEFT,width=150)
+
 
        
         self.stTitulo = wx.StaticText(panel,label=('Lista de Atributos'),pos=(400,10),size=(200,30))
@@ -194,6 +191,9 @@ class ViewTest(wx.Frame):
         self.stTitulo6.SetFont(font1)
 
         self.btnGenerar = wx.Button(panel,label='Generar Clase',size=(140,50),pos=(381,505))
+
+        self.botonEliminar = wx.Button(panel,label='Eliminar Atributo',size=(120,30),pos=(760,42))
+      
 #---------------------------------------- SECCIÓN CREACIÓN --------------------------------------------------
 
  
@@ -205,8 +205,9 @@ class ViewTest(wx.Frame):
         self.tcNombreClase.Bind(wx.EVT_CHAR, validador_letras)
         self.tcNombreAtributo.Bind(wx.EVT_CHAR, validador_letras)
         self.btAddAtributte.Bind(wx.EVT_BUTTON, validador_atributo)
-        self.btnRuta.Bind(wx.EVT_BUTTON,mostrarRuta)
-        self.btnGenerar.Bind(wx.EVT_BUTTON,generar_clase)
+        self.btnRuta.Bind(wx.EVT_BUTTON, mostrarRuta)
+        self.btnGenerar.Bind(wx.EVT_BUTTON, generar_clase)
+        self.botonEliminar.Bind(wx.EVT_BUTTON, eliminarAtributo)
 
 #---------------------------------------- SECCIÓN BIND --------------------------------------------------           
 

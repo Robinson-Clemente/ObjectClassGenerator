@@ -1,4 +1,4 @@
-from Atributo import *  
+from Atributo import Atributo  
 from Messages import programMessage
 
 nombreclase = ""
