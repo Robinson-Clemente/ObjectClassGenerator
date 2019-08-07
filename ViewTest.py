@@ -81,7 +81,10 @@ class ViewTest(wx.Frame):
                self.tabla2.SetStringItem(self.n,0,nombre)
                self.tabla2.SetStringItem(self.n,1,tipo)                        
                            
-               self.n=self.n+1 
+               self.n=self.n+1
+
+               self.tcNombreAtributo.SetValue('')
+
 
         def read_checkboxes():
             if self.reprcheckbox.IsChecked():
@@ -143,6 +146,8 @@ class ViewTest(wx.Frame):
         self.line2 = wx.StaticBox(panel,label='',pos=(450,353),size=(3,150))
         self.line2.SetBackgroundColour((8,8,8))      
         
+      
+       
 
         #Creamos la tabla
         self.tabla2 = wx.lib.agw.ultimatelistctrl.UltimateListCtrl(panel,pos=(150,40),size=(600,300),agwStyle=ULC.ULC_REPORT)
@@ -166,7 +171,7 @@ class ViewTest(wx.Frame):
         self.btnRuta = wx.Button(panel,label='Ver Ruta',pos=(150,435),size=(120,30))
 
         self.stnombre = wx.StaticText(panel,label='Nombre de la Clase',pos=(10,393),size=(200,30))
-        self.tcNombreClase = wx.TextCtrl(panel,pos=(150,393),size=(120,26))
+        self.tcNombreClase = wx.TextCtrl(panel,pos=(150,390),size=(120,30))
         self.stAdvertencia = wx.StaticText(panel,label='(Sin Extensión)',pos=(275,395),size=(150,80))
         
         #Creamos un checkbox para el primer metodo especial repr
@@ -176,10 +181,10 @@ class ViewTest(wx.Frame):
         
 
         self.stTitulo4 = wx.StaticText(panel,label='Nombre Atributo',pos=(460,393),size=(200,30))
-        self.tcNombreAtributo = wx.TextCtrl(panel,pos=(585,393),size=(140,22))
+        self.tcNombreAtributo = wx.TextCtrl(panel,pos=(585,388),size=(140,30))
 
         self.stTitulo5 = wx.StaticText(panel,label='Tipo del Atributo',pos=(460,435),size=(200,30))
-        self.cbTipo= wx.ComboBox(panel,pos=(585,435),value='str',size=(140,25),
+        self.cbTipo= wx.ComboBox(panel,pos=(585,430),value='str',size=(140,32),
         choices=['str','int','bool','long','float'],style=wx.CB_READONLY)
 
         self.btAddAtributte = wx.Button(panel,label='Agregar Atributo',size=(120,30),pos=(750,410))
