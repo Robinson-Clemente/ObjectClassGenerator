@@ -1,2 +1,2 @@
 # ObjectClassGenerator
-This repo constains a ObjectClass Generator for Python using Properties (wxPython for GUI)
+This repo constains an ObjectClass Generator for Python using Properties (wxPython for GUI)
